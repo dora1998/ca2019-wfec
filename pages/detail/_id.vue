@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       img: {},
-      infoLoaded: false
+      infoLoaded: true
     }
   },
 
@@ -80,30 +80,13 @@ export default {
     }
   },
 
-  watch: {
-    // eslint-disable-next-line prettier/prettier
-    '$route': {
-      async handler(to, from) {
-        this.infoLoaded = false
+  beforeRouteUpdate(to, from, next) {
+    this.loadImage(to.params.id)
+    next()
+  },
 
-        const imgIds = this.images.map(img => img.id)
-        if (imgIds.includes(to.params.id)) {
-          this.img = this.images[imgIds.indexOf(to.params.id)]
-          this.infoLoaded = true
-        } else {
-          this.img = {}
-          try {
-            const res = await this.$api.getImageDetail(to.params.id)
-            const result = res.data
-            this.img = result.data
-            this.infoLoaded = true
-          } catch (err) {
-            console.log(err)
-          }
-        }
-      },
-      immediate: true
-    }
+  mounted() {
+    this.loadImage(this.$route.params.id)
   },
 
   methods: {
@@ -113,6 +96,27 @@ export default {
     },
     viewImgList() {
       this.$router.push({ path: '/' })
+    },
+    loadImage(id) {
+      this.infoLoaded = false
+
+      const imgIds = this.images.map(img => img.id)
+      if (imgIds.includes(id)) {
+        this.img = this.images[imgIds.indexOf(id)]
+        this.infoLoaded = true
+      } else {
+        ;(async () => {
+          this.img = {}
+          try {
+            const res = await this.$api.getImageDetail(id)
+            const result = res.data
+            this.img = result.data
+            this.infoLoaded = true
+          } catch (err) {
+            console.log(err)
+          }
+        })()
+      }
     }
   },
 
