@@ -7,22 +7,41 @@
     <v-layout
       xs12
       column
+      class="container pa-0"
     >
-      <v-flex
+      <div class="back">
+        <v-btn @click="viewImgList" flat icon>
+          <v-icon large>
+            chevron_left
+          </v-icon>
+        </v-btn>
+      </div>
+      <v-layout
         xs10
+        align-center
       >
         <v-img
           :src="img.url"
-          height="100%"
           max-height="calc((100vh - 48px) / 12 * 10 - 96px)"
           contain
-        />
-      </v-flex>
+        >
+          <template v-slot:placeholder>
+            <v-layout
+              fill-height
+              align-center
+              justify-center
+              ma-0
+            >
+              <v-progress-circular indeterminate color="grey lighten-5" />
+            </v-layout>
+          </template>
+        </v-img>
+      </v-layout>
       <v-flex
         xs2
       >
         <horizontal-img-list
-          :images="images" 
+          :selected="imgId"
           @click_img="viewAnotherImage"
         />
       </v-flex>
@@ -31,10 +50,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 
 export default {
+  key: '_id',
+
   components: {
     HorizontalImgList
   },
@@ -46,29 +67,37 @@ export default {
   },
 
   computed: {
-    ...mapState(['images']),
     imgId() {
       return this.$route.params.id
     }
   },
 
-  async mounted() {
-    if (this.images.length === 0) {
-      this.fetchImgList(0)
-    }
-    try {
-      const res = await this.$api.getImageDetail(this.imgId)
-      const result = res.data
-      this.img = result.data
-    } catch (err) {
-      console.log(err)
+  watch: {
+    // eslint-disable-next-line prettier/prettier
+    '$route': {
+      handler(to, from) {
+        this.img = {}
+        ;(async () => {
+          try {
+            const res = await this.$api.getImageDetail(to.params.id)
+            const result = res.data
+            this.img = result.data
+          } catch (err) {
+            console.log(err)
+          }
+        })()
+      },
+      immediate: true
     }
   },
 
   methods: {
     ...mapActions(['fetchImgList']),
     viewAnotherImage(id) {
-      this.$router.push({ path: `/detail/${id}` })
+      this.$router.push({ name: 'detail-id', params: { id } })
+    },
+    viewImgList() {
+      this.$router.push({ path: '/' })
     }
   },
 
@@ -78,3 +107,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.back {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+}
+</style>
