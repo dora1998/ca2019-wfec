@@ -19,7 +19,7 @@
       <v-flex
         xs10
         align-center
-        class="not-shrink pb-2"
+        class="not-shrink pb-2 img_container"
       >
         <v-img
           :src="img.url"
@@ -38,6 +38,7 @@
             </v-layout>
           </template>
         </v-img>
+        <image-info :img="img" v-if="infoLoaded" />
       </v-flex>
       <v-flex
         xs2
@@ -55,17 +56,20 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
+import ImageInfo from '~/components/ImageInfo'
 
 export default {
   key: '_id',
 
   components: {
-    HorizontalImgList
+    HorizontalImgList,
+    ImageInfo
   },
 
   data() {
     return {
-      img: {}
+      img: {},
+      infoLoaded: false
     }
   },
 
@@ -80,8 +84,12 @@ export default {
     // eslint-disable-next-line prettier/prettier
     '$route': {
       handler(to, from) {
-        if (this.images[to.params.id]) {
-          this.img = this.images[to.params.id]
+        this.infoLoaded = false
+
+        const imgIds = this.images.map(img => img.id)
+        if (imgIds.includes(to.params.id)) {
+          this.img = this.images[imgIds.indexOf(to.params.id)]
+          this.infoLoaded = true
         } else {
           this.img = {}
           ;(async () => {
@@ -89,6 +97,7 @@ export default {
               const res = await this.$api.getImageDetail(to.params.id)
               const result = res.data
               this.img = result.data
+              this.infoLoaded = true
             } catch (err) {
               console.log(err)
             }
@@ -125,5 +134,8 @@ export default {
 }
 .not-shrink {
   flex-shrink: 0;
+}
+.img_container {
+  position: relative;
 }
 </style>
