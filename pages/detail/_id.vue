@@ -7,7 +7,7 @@
     <v-layout
       xs12
       column
-      class="container"
+      class="container pa-0"
     >
       <v-btn @click="viewImgList" flat icon class="back">
         <v-icon large>
@@ -53,6 +53,8 @@ import { mapState, mapActions } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 
 export default {
+  key: '_id',
+
   components: {
     HorizontalImgList
   },
