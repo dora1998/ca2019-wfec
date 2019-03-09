@@ -39,7 +39,6 @@
         xs2
       >
         <horizontal-img-list
-          :images="images" 
           :selected="imgId"
           @click_img="viewAnotherImage"
         />
@@ -49,7 +48,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 
 export default {
@@ -66,7 +65,6 @@ export default {
   },
 
   computed: {
-    ...mapState(['images']),
     imgId() {
       return this.$route.params.id
     }
@@ -88,12 +86,6 @@ export default {
         })()
       },
       immediate: true
-    }
-  },
-
-  mounted() {
-    if (this.images.length === 0) {
-      this.fetchImgList(0)
     }
   },
 
