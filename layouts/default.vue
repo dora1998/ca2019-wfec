@@ -3,6 +3,7 @@
     <v-content>
       <v-container
         fill-height
+        fluid
       >
         <nuxt />
       </v-container>
