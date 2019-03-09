@@ -6,7 +6,12 @@
       :src="img.url"
       @click="$emit('click_img', img.id)"
       class="mini_img"
-    />
+    >
+      <div
+        v-if="img.id !== selected"
+        class="fill-height not-selected"
+      />
+    </v-img>
   </div>
 </template>
 
@@ -17,9 +22,9 @@ export default {
       default: () => [],
       type: Array
     },
-    pos: {
-      default: 0,
-      type: Number
+    selected: {
+      default: null,
+      type: String
     }
   }
 }
@@ -27,7 +32,6 @@ export default {
 
 <style lang="scss" scoped>
 .horizontal_container {
-  width: auto;
   height: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -38,5 +42,8 @@ export default {
 .mini_img {
   flex: 0 0 20%;
   margin-right: 8px;
+}
+.mini_img .not-selected {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

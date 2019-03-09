@@ -23,6 +23,7 @@
       >
         <horizontal-img-list
           :images="images" 
+          :selected="img.id"
           @click_img="viewAnotherImage"
         />
       </v-flex>
