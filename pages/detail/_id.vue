@@ -83,7 +83,7 @@ export default {
   watch: {
     // eslint-disable-next-line prettier/prettier
     '$route': {
-      handler(to, from) {
+      async handler(to, from) {
         this.infoLoaded = false
 
         const imgIds = this.images.map(img => img.id)
@@ -92,16 +92,14 @@ export default {
           this.infoLoaded = true
         } else {
           this.img = {}
-          ;(async () => {
-            try {
-              const res = await this.$api.getImageDetail(to.params.id)
-              const result = res.data
-              this.img = result.data
-              this.infoLoaded = true
-            } catch (err) {
-              console.log(err)
-            }
-          })()
+          try {
+            const res = await this.$api.getImageDetail(to.params.id)
+            const result = res.data
+            this.img = result.data
+            this.infoLoaded = true
+          } catch (err) {
+            console.log(err)
+          }
         }
       },
       immediate: true
