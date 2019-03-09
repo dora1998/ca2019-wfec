@@ -8,16 +8,16 @@
       xs12
       column
     >
-      <v-flex
+      <v-layout
         xs10
+        align-center
       >
         <v-img
           :src="img.url"
-          height="100%"
           max-height="calc((100vh - 48px) / 12 * 10 - 96px)"
           contain
         />
-      </v-flex>
+      </v-layout>
       <v-flex
         xs2
       >
