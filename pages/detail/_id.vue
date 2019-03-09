@@ -9,11 +9,13 @@
       column
       class="container pa-0"
     >
-      <v-btn @click="viewImgList" flat icon class="back">
-        <v-icon large>
-          chevron_left
-        </v-icon>
-      </v-btn>
+      <div class="back">
+        <v-btn @click="viewImgList" flat icon>
+          <v-icon large>
+            chevron_left
+          </v-icon>
+        </v-btn>
+      </div>
       <v-layout
         xs10
         align-center
