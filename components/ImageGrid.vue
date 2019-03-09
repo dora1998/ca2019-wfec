@@ -11,6 +11,7 @@
           <v-img
             :src="img.url"
             aspect-ratio="1"
+            @click="viewDetail(img.id)"
             class="grey lighten-2"
           >
             <template v-slot:placeholder>
@@ -44,6 +45,12 @@ export default {
     const res = await this.$api.getImageList(20, 0)
     const result = res.data
     this.images = result.data.images
+  },
+
+  methods: {
+    viewDetail(id) {
+      this.$router.push({ path: `/detail/${id}` })
+    }
   }
 }
 </script>
