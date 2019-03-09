@@ -5,6 +5,7 @@
         v-for="img in images"
         :key="img.id"
         xs4
+        md2
         d-flex
       >
         <v-card flat tile class="d-flex">
@@ -27,7 +28,7 @@
           </v-img>
         </v-card>
       </v-flex>
-      <div id="grid_bottom" v-if="!isLoadComplete" />
+      <div id="grid_bottom" />
       <v-flex xs12>
         <div v-if="loading" class="text-xs-center">
           <v-progress-circular
@@ -72,6 +73,7 @@ export default {
       const observer = new IntersectionObserver(
         entries => {
           entries.forEach(async entry => {
+            if (this.isLoadComplete) return
             if (entry.intersectionRatio !== 0) {
               this.loading = true
               await this.fetchImgList(this.images.length)
