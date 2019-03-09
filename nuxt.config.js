@@ -1,3 +1,4 @@
+/* eslint-disable nuxt/no-cjs-in-config */
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 const pkg = require('./package')
 
@@ -37,7 +38,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['@/plugins/vuetify'],
+  plugins: ['@/plugins/vuetify', '@/plugins/api'],
 
   /*
   ** Nuxt.js modules
@@ -51,7 +52,7 @@ module.exports = {
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: 'https://wfc-2019.firebaseapp.com'
   },
 
   /*
