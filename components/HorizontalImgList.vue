@@ -63,17 +63,7 @@ export default {
   },
 
   mounted() {
-    if (this.images.length === 0) return
-    const selectedPos = this.getImagePos(this.selected)
-    if (selectedPos === null) return
-
-    const containerRef = this.$refs.container
-    const containerRect = containerRef.getBoundingClientRect()
-
-    // ミニギャラリーの表示部分の真ん中にくるように計算
-    const centerPos = selectedPos.left + selectedPos.width / 2
-    const scrollLeftPos = centerPos - containerRect.width / 2
-    containerRef.scrollLeft = scrollLeftPos
+    this.moveToSelectedImg()
   },
 
   methods: {
@@ -81,6 +71,19 @@ export default {
     getImagePos(id) {
       const imgRef = this.$refs[id][0].$el
       return imgRef.getBoundingClientRect()
+    },
+    moveToSelectedImg() {
+      if (this.images.length === 0) return
+      const selectedPos = this.getImagePos(this.selected)
+      if (selectedPos === null) return
+
+      const containerRef = this.$refs.container
+      const containerRect = containerRef.getBoundingClientRect()
+
+      // ミニギャラリーの表示部分の真ん中にくるように計算
+      const centerPos = selectedPos.left + selectedPos.width / 2
+      const scrollLeftPos = centerPos - containerRect.width / 2
+      containerRef.scrollLeft = scrollLeftPos
     }
   }
 }
