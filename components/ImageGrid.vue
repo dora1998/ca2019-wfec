@@ -10,6 +10,7 @@
         <v-card flat tile class="d-flex">
           <v-img
             :src="img.url"
+            @click="viewDetail(img.id)"
             aspect-ratio="1"
             class="grey lighten-2"
           >
@@ -31,19 +32,26 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'ImageGrid',
 
-  data() {
-    return {
-      images: []
+  computed: {
+    ...mapState(['images'])
+  },
+
+  mounted() {
+    if (this.images.length === 0) {
+      this.fetchImgList(0)
     }
   },
 
-  async mounted() {
-    const res = await this.$api.getImageList(20, 0)
-    const result = res.data
-    this.images = result.data.images
+  methods: {
+    ...mapActions(['fetchImgList']),
+    viewDetail(id) {
+      this.$router.push({ path: `/detail/${id}` })
+    }
   }
 }
 </script>
