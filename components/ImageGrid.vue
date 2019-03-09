@@ -2,14 +2,14 @@
   <v-container grid-list-sm fluid>
     <v-layout row wrap>
       <v-flex
-        v-for="n in 9"
-        :key="n"
+        v-for="img in images"
+        :key="img.id"
         xs4
         d-flex
       >
         <v-card flat tile class="d-flex">
           <v-img
-            src="https://pixabay.com/get/ed35b20d2cf3003ed1584d05fb1d4797eb75e1d211b90c4090f5c379a3eab3bad0_640.jpg"
+            :src="img.url"
             aspect-ratio="1"
             class="grey lighten-2"
           >
@@ -32,6 +32,18 @@
 
 <script>
 export default {
-  name: 'ImageGrid'
+  name: 'ImageGrid',
+
+  data() {
+    return {
+      images: []
+    }
+  },
+
+  async mounted() {
+    const res = await this.$api.getImageList(20, 0)
+    const result = res.data
+    this.images = result.data.images
+  }
 }
 </script>
