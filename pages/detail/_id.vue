@@ -4,26 +4,28 @@
     justify-center
     fill-height
   >
+    <div class="back">
+      <v-btn @click="viewImgList" flat icon>
+        <v-icon large>
+          chevron_left
+        </v-icon>
+      </v-btn>
+    </div>
     <v-layout
       xs12
       column
-      class="container pa-0"
+      class="pa-0"
     >
-      <div class="back">
-        <v-btn @click="viewImgList" flat icon>
-          <v-icon large>
-            chevron_left
-          </v-icon>
-        </v-btn>
-      </div>
-      <v-layout
+      <v-flex
         xs10
         align-center
+        class="not-shrink pb-2 img_container"
       >
         <v-img
           :src="img.url"
-          max-height="calc((100vh - 48px) / 12 * 10 - 96px)"
+          height="100%"
           contain
+          aspect-ratio="2"
         >
           <template v-slot:placeholder>
             <v-layout
@@ -36,9 +38,11 @@
             </v-layout>
           </template>
         </v-img>
-      </v-layout>
+        <image-info :img="img" v-if="infoLoaded" />
+      </v-flex>
       <v-flex
         xs2
+        class="not-shrink"
       >
         <horizontal-img-list
           :selected="imgId"
@@ -50,45 +54,42 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
+import ImageInfo from '~/components/ImageInfo'
+
+let img = {}
+const infoLoaded = true
 
 export default {
   key: '_id',
 
   components: {
-    HorizontalImgList
+    HorizontalImgList,
+    ImageInfo
   },
 
   data() {
     return {
-      img: {}
+      img: img,
+      infoLoaded: infoLoaded
     }
   },
 
   computed: {
+    ...mapState(['images']),
     imgId() {
       return this.$route.params.id
     }
   },
 
-  watch: {
-    // eslint-disable-next-line prettier/prettier
-    '$route': {
-      handler(to, from) {
-        this.img = {}
-        ;(async () => {
-          try {
-            const res = await this.$api.getImageDetail(to.params.id)
-            const result = res.data
-            this.img = result.data
-          } catch (err) {
-            console.log(err)
-          }
-        })()
-      },
-      immediate: true
-    }
+  async beforeRouteUpdate(to, from, next) {
+    img = await this.loadImage(to.params.id)
+    next()
+  },
+
+  mounted() {
+    this.loadImage(this.$route.params.id)
   },
 
   methods: {
@@ -98,6 +99,23 @@ export default {
     },
     viewImgList() {
       this.$router.push({ path: '/' })
+    },
+    async loadImage(id) {
+      const imgIds = this.images.map(img => img.id)
+      if (imgIds.includes(id)) {
+        this.img = this.images[imgIds.indexOf(id)]
+        return this.img
+      } else {
+        this.img = {}
+        try {
+          const res = await this.$api.getImageDetail(id)
+          const result = res.data
+          this.img = result.data
+          return this.img
+        } catch (err) {
+          console.log(err)
+        }
+      }
     }
   },
 
@@ -113,5 +131,12 @@ export default {
   position: absolute;
   left: 16px;
   top: 16px;
+  z-index: 999;
+}
+.not-shrink {
+  flex-shrink: 0;
+}
+.img_container {
+  position: relative;
 }
 </style>

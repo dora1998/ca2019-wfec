@@ -7,6 +7,7 @@
       :src="img.url"
       @click="$emit('click_img', img.id)"
       class="mini_img"
+      aspect-ratio="1" 
     >
       <div
         v-if="img.id === selected"
@@ -62,16 +63,7 @@ export default {
   },
 
   mounted() {
-    const selectedPos = this.getImagePos(this.selected)
-    if (selectedPos === null) return
-
-    const containerRef = this.$refs.container
-    const containerRect = containerRef.getBoundingClientRect()
-
-    // ミニギャラリーの表示部分の真ん中にくるように計算
-    const centerPos = selectedPos.left + selectedPos.width / 2
-    const scrollLeftPos = centerPos - containerRect.width / 2
-    containerRef.scrollLeft = scrollLeftPos
+    this.moveToSelectedImg()
   },
 
   methods: {
@@ -79,6 +71,19 @@ export default {
     getImagePos(id) {
       const imgRef = this.$refs[id][0].$el
       return imgRef.getBoundingClientRect()
+    },
+    moveToSelectedImg() {
+      if (this.images.length === 0) return
+      const selectedPos = this.getImagePos(this.selected)
+      if (selectedPos === null) return
+
+      const containerRef = this.$refs.container
+      const containerRect = containerRef.getBoundingClientRect()
+
+      // ミニギャラリーの表示部分の真ん中にくるように計算
+      const centerPos = selectedPos.left + selectedPos.width / 2
+      const scrollLeftPos = centerPos - containerRect.width / 2
+      containerRef.scrollLeft = scrollLeftPos
     }
   }
 }
@@ -88,13 +93,14 @@ export default {
 .horizontal_container {
   height: 100%;
   overflow-x: auto;
-  white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-flow: row nowrap;
 }
 .mini_img {
-  flex: 0 0 20%;
+  flex-basis: calc(100vh / 12 * 2);
+  width: auto;
+  height: 100%;
   margin-right: 8px;
   cursor: pointer;
 }
