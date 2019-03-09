@@ -4,26 +4,28 @@
     justify-center
     fill-height
   >
+    <div class="back">
+      <v-btn @click="viewImgList" flat icon>
+        <v-icon large>
+          chevron_left
+        </v-icon>
+      </v-btn>
+    </div>
     <v-layout
       xs12
       column
-      class="container pa-0"
+      class="pa-0"
     >
-      <div class="back">
-        <v-btn @click="viewImgList" flat icon>
-          <v-icon large>
-            chevron_left
-          </v-icon>
-        </v-btn>
-      </div>
-      <v-layout
+      <v-flex
         xs10
         align-center
+        class="not-shrink pb-2"
       >
         <v-img
           :src="img.url"
-          max-height="calc((100vh - 48px) / 12 * 10 - 96px)"
+          height="100%"
           contain
+          aspect-ratio="2"
         >
           <template v-slot:placeholder>
             <v-layout
@@ -36,9 +38,10 @@
             </v-layout>
           </template>
         </v-img>
-      </v-layout>
+      </v-flex>
       <v-flex
         xs2
+        class="not-shrink"
       >
         <horizontal-img-list
           :selected="imgId"
@@ -113,5 +116,9 @@ export default {
   position: absolute;
   left: 16px;
   top: 16px;
+  z-index: 999;
+}
+.not-shrink {
+  flex-shrink: 0;
 }
 </style>

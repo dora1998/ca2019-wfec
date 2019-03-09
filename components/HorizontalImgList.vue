@@ -7,6 +7,7 @@
       :src="img.url"
       @click="$emit('click_img', img.id)"
       class="mini_img"
+      aspect-ratio="1" 
     >
       <div
         v-if="img.id === selected"
@@ -62,6 +63,7 @@ export default {
   },
 
   mounted() {
+    if (this.images.length === 0) return
     const selectedPos = this.getImagePos(this.selected)
     if (selectedPos === null) return
 
@@ -88,13 +90,14 @@ export default {
 .horizontal_container {
   height: 100%;
   overflow-x: auto;
-  white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-flow: row nowrap;
 }
 .mini_img {
-  flex: 0 0 20%;
+  flex-basis: calc(100vh / 12 * 2);
+  width: auto;
+  height: 100%;
   margin-right: 8px;
   cursor: pointer;
 }
