@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 
 export default {
@@ -70,6 +70,7 @@ export default {
   },
 
   computed: {
+    ...mapState(['images']),
     imgId() {
       return this.$route.params.id
     }
@@ -79,16 +80,20 @@ export default {
     // eslint-disable-next-line prettier/prettier
     '$route': {
       handler(to, from) {
-        this.img = {}
-        ;(async () => {
-          try {
-            const res = await this.$api.getImageDetail(to.params.id)
-            const result = res.data
-            this.img = result.data
-          } catch (err) {
-            console.log(err)
-          }
-        })()
+        if (this.images[to.params.id]) {
+          this.img = this.images[to.params.id]
+        } else {
+          this.img = {}
+          ;(async () => {
+            try {
+              const res = await this.$api.getImageDetail(to.params.id)
+              const result = res.data
+              this.img = result.data
+            } catch (err) {
+              console.log(err)
+            }
+          })()
+        }
       },
       immediate: true
     }
