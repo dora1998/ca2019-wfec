@@ -58,6 +58,9 @@ import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 import ImageInfo from '~/components/ImageInfo'
 
+let img = {}
+const infoLoaded = true
+
 export default {
   key: '_id',
 
@@ -68,8 +71,8 @@ export default {
 
   data() {
     return {
-      img: {},
-      infoLoaded: true
+      img: img,
+      infoLoaded: infoLoaded
     }
   },
 
@@ -80,8 +83,8 @@ export default {
     }
   },
 
-  beforeRouteUpdate(to, from, next) {
-    this.loadImage(to.params.id)
+  async beforeRouteUpdate(to, from, next) {
+    img = await this.loadImage(to.params.id)
     next()
   },
 
@@ -97,25 +100,21 @@ export default {
     viewImgList() {
       this.$router.push({ path: '/' })
     },
-    loadImage(id) {
-      this.infoLoaded = false
-
+    async loadImage(id) {
       const imgIds = this.images.map(img => img.id)
       if (imgIds.includes(id)) {
         this.img = this.images[imgIds.indexOf(id)]
-        this.infoLoaded = true
+        return this.img
       } else {
-        ;(async () => {
-          this.img = {}
-          try {
-            const res = await this.$api.getImageDetail(id)
-            const result = res.data
-            this.img = result.data
-            this.infoLoaded = true
-          } catch (err) {
-            console.log(err)
-          }
-        })()
+        this.img = {}
+        try {
+          const res = await this.$api.getImageDetail(id)
+          const result = res.data
+          this.img = result.data
+          return this.img
+        } catch (err) {
+          console.log(err)
+        }
       }
     }
   },
