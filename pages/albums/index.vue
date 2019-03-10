@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .fab {
-  position: absolute;
+  position: fixed;
   right: 16px;
   bottom: 72px;
 }
