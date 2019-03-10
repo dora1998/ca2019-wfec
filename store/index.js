@@ -1,5 +1,3 @@
-const IMG_LIMIT = 24
-
 export const state = () => ({
   images: [],
   isLoadComplete: false
@@ -10,11 +8,6 @@ export const mutations = {
     state.images = newImgs
   },
   addImages(state, newImgs) {
-    if (newImgs.length === 0 || newImgs.length < IMG_LIMIT) {
-      state.isLoadComplete = true
-      return
-    }
-
     if (state.images.length === 0) {
       state.images.push(...newImgs)
     } else {
@@ -29,14 +22,23 @@ export const mutations = {
         state.images.push(...newImgs.slice(startIndex + 1, newImgs.length - 1))
       }
     }
+  },
+  setLoadComplete(state, newState) {
+    state.isLoadComplete = newState
   }
 }
 
 export const actions = {
-  async fetchImgList({ commit, state }, offset = 0) {
+  async fetchImgList({ commit, state }, options) {
     if (state.isLoadComplete) return
-    const res = await this.$api.getImageList(IMG_LIMIT, offset)
+    const res = await this.$api.getImageList(options.limit, options.offset)
     const result = res.data
+    const images = result.data.images
+
+    if (images.length === 0 || images.length < options.limit) {
+      commit('setLoadComplete', true)
+    }
+
     commit('addImages', result.data.images)
   }
 }

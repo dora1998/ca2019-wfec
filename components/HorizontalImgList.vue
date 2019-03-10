@@ -55,7 +55,7 @@ export default {
         if (this.images.length === 0) return
 
         if (this.images.length <= selectPos + 10) {
-          this.fetchImgList(selectPos + 1)
+          this.fetchImgList({ offset: selectPos + 1, limit: 10 })
         }
       },
       immediate: true
