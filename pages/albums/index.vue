@@ -11,9 +11,9 @@
       </h1>
       <album-list />
       <v-btn
+        @click="addEmptyAlbum"
         fab
         dark
-        @click="addEmptyAlbum"
         color="secondary"
         class="fab"
       >
