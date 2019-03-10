@@ -9,7 +9,7 @@
         <nuxt />
       </v-container>
     </v-content>
-    <bottom-nav />
+    <bottom-nav :currentPath="$route.path" />
   </v-app>
 </template>
 

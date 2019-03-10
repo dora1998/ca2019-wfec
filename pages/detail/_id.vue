@@ -4,13 +4,22 @@
     justify-center
     fill-height
   >
-    <div class="back">
-      <v-btn @click="viewImgList" flat icon>
-        <v-icon large>
-          chevron_left
-        </v-icon>
+    <v-toolbar dark>
+      <v-btn @click="viewImgList" icon>
+        <v-icon>arrow_back</v-icon>
       </v-btn>
-    </div>
+
+      <v-toolbar-title>{{ img.title }}</v-toolbar-title>
+
+      <v-spacer />
+
+      <v-btn @click="openBottomSheet" icon>
+        <v-icon>library_add</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <album-select-sheet :showProp.sync="show" :selected.sync="selected" />
+
     <v-layout
       xs12
       column
@@ -55,6 +64,7 @@
 import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 import ImageInfo from '~/components/ImageInfo'
+import AlbumSelectSheet from '~/components/AlbumSelectSheet'
 
 let img = {}
 const infoLoaded = true
@@ -64,13 +74,16 @@ export default {
 
   components: {
     HorizontalImgList,
-    ImageInfo
+    ImageInfo,
+    AlbumSelectSheet
   },
 
   data() {
     return {
       img: img,
-      infoLoaded: infoLoaded
+      infoLoaded: infoLoaded,
+      show: false,
+      selected: null
     }
   },
 
@@ -78,6 +91,13 @@ export default {
     ...mapState(['images']),
     imgId() {
       return this.$route.params.id
+    }
+  },
+
+  watch: {
+    show(newVal) {
+      if (newVal === true || this.selected === null) return
+      this.addImgToAlbum({ albumId: this.selected, image: this.img })
     }
   },
 
@@ -92,12 +112,15 @@ export default {
 
   methods: {
     ...mapActions(['fetchImgList']),
+    ...mapActions('albums', ['addImgToAlbum']),
+
     viewAnotherImage(id) {
       this.$router.push({ name: 'detail-id', params: { id } })
     },
     viewImgList() {
       this.$router.push({ path: '/' })
     },
+
     async loadImage(id) {
       const imgIds = this.images.map(img => img.id)
       if (imgIds.includes(id)) {
@@ -114,6 +137,11 @@ export default {
           console.log(err)
         }
       }
+    },
+
+    openBottomSheet() {
+      this.show = true
+      this.selected = null
     }
   },
 

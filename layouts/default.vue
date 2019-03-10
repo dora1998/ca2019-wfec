@@ -4,6 +4,7 @@
       <v-container
         fill-height
         fluid
+        class="pa-0"
       >
         <nuxt />
       </v-container>

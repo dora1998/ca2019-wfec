@@ -51,7 +51,7 @@ export default {
     currentPath: {
       handler(newVal) {
         if (!newVal) return
-        this.selecteed = newVal
+        this.selected = newVal
       },
       immediate: true
     },

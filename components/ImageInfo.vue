@@ -1,6 +1,5 @@
 <template>
   <div class="info_container">
-    <h2 v-text="img.title" />
     <p v-text="img.description" />
     <p>
       <v-icon small dark>
