@@ -16,6 +16,7 @@
 import ImageGrid from '~/components/ImageGrid'
 
 export default {
+  layout: 'with_bottomnav',
   components: {
     ImageGrid
   }
