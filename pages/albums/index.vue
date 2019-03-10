@@ -56,6 +56,6 @@ export default {
 .fab {
   position: absolute;
   right: 16px;
-  bottom: 36px;
+  bottom: 72px;
 }
 </style>
