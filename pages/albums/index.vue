@@ -6,12 +6,13 @@
       xs12
       sm8
     >
+      <name-input-dialog :showProp.sync="show" />
       <h1 class="mb-2">
         アルバム
       </h1>
       <album-list />
       <v-btn
-        @click="addEmptyAlbum"
+        @click="openAddDialog"
         fab
         dark
         color="secondary"
@@ -26,26 +27,35 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import AlbumList from '~/components/AlbumList'
+import NameInputDialog from '~/components/NameInputDialog'
 
 export default {
   layout: 'with_bottomnav',
 
   components: {
-    AlbumList
+    AlbumList,
+    NameInputDialog
+  },
+
+  data() {
+    return {
+      show: false
+    }
   },
 
   methods: {
-    ...mapActions('albums', ['addEmptyAlbum'])
+    openAddDialog() {
+      this.show = true
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .fab {
-  position: absolute;
+  position: fixed;
   right: 16px;
-  bottom: 36px;
+  bottom: 72px;
 }
 </style>

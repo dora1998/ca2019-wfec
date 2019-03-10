@@ -86,8 +86,10 @@ export default {
   methods: {
     ...mapActions(['fetchImgList']),
     getImagePos(id) {
-      const imgRef = this.$refs[id][0].$el
-      return imgRef.getBoundingClientRect()
+      const imgRef = this.$refs[id]
+      if (imgRef === undefined) return
+      if (imgRef[0].$el === undefined) return
+      return imgRef[0].$el.getBoundingClientRect()
     },
     moveToSelectedImg() {
       if (this.images.length === 0) return

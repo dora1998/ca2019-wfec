@@ -32,7 +32,7 @@ export const mutations = {
 export const actions = {
   addEmptyAlbum({ commit }, name) {
     const data = {
-      name: 'アルバム',
+      name: name,
       imgs: []
     }
     commit('addAlbum', { id: album.generateUUID(), data: data })

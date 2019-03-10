@@ -24,7 +24,8 @@
     "uuid": "^3.3.2",
     "vue-lazyload": "^1.2.6",
     "vuetify": "^1.5.5",
-    "vuetify-loader": "^1.2.1"
+    "vuetify-loader": "^1.2.1",
+    "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
