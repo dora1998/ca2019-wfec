@@ -7,6 +7,12 @@ const apiFactory = axios => ({
 
   getImageDetail(id) {
     return axios.get(`/image/${id}`)
+  },
+
+  getAroundImageList(id, limit) {
+    return axios.get(`/image/around/${id}`, {
+      params: { limit: limit }
+    })
   }
 })
 

@@ -56,7 +56,7 @@ import { mapActions, mapState } from 'vuex'
 import HorizontalImgList from '~/components/HorizontalImgList'
 import ImageInfo from '~/components/ImageInfo'
 
-let img = { url: '' }
+let img = {}
 const infoLoaded = true
 
 export default {
@@ -104,7 +104,7 @@ export default {
         this.img = this.images[imgIds.indexOf(id)]
         return this.img
       } else {
-        this.img = { url: '' }
+        this.img = {}
         try {
           const res = await this.$api.getImageDetail(id)
           const result = res.data
