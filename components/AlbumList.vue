@@ -3,6 +3,7 @@
     <v-card 
       v-for="(album, id) in cachedList"
       :key="id"
+      @click="viewAlbum(id)"
       class="pa-4 mb-4"
     >
       <h2 class="mb-2">
@@ -54,7 +55,10 @@ export default {
   },
 
   methods: {
-    ...mapMutations('albums', ['setCachedList'])
+    ...mapMutations('albums', ['setCachedList']),
+    viewAlbum(id) {
+      this.$router.push({ path: `/albums/${id}` })
+    }
   }
 }
 </script>
