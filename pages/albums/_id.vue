@@ -22,6 +22,10 @@
           <v-toolbar-title>{{ albumData.name }}</v-toolbar-title>
 
           <v-spacer />
+
+          <v-btn @click="removeAlbum" icon>
+            <v-icon>delete</v-icon>
+          </v-btn>
         </v-toolbar>
 
         <div class="pa-2">
@@ -34,7 +38,7 @@
 
 <script>
 import album from '~/utils/album'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import AlbumGrid from '~/components/AlbumGrid'
 
 export default {
@@ -73,9 +77,14 @@ export default {
 
   methods: {
     ...mapMutations('albums', ['setCachedList']),
+    ...mapActions('albums', ['deleteAlbum']),
 
     viewAlbumList() {
       this.$router.push({ path: '/albums' })
+    },
+    removeAlbum() {
+      this.deleteAlbum(this.$route.params.id)
+      this.viewAlbumList()
     }
   }
 }

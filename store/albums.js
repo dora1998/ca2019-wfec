@@ -17,6 +17,15 @@ export const mutations = {
   },
   addAlbum(state, params) {
     Vue.set(state.savedList, params.id, params.data)
+  },
+
+  deleteSavedList(state, id) {
+    if (state.savedList[id] === undefined) return
+    delete state.savedList[id]
+  },
+  deleteCachedList(state, id) {
+    if (state.cachedList[id] === undefined) return
+    delete state.cachedList[id]
   }
 }
 
@@ -41,5 +50,10 @@ export const actions = {
       cachedAlbum.imgs.push(params.image)
       commit('setCachedList', { id: params.albumId, data: cachedAlbum })
     }
+  },
+
+  deleteAlbum({ commit }, id) {
+    commit('deleteSavedList', id)
+    commit('deleteCachedList', id)
   }
 }
