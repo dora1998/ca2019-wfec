@@ -1,11 +1,15 @@
 <template>
   <div>
-    <v-card v-if="loaded.includes('45745c60-7b1a-11e8-9c9c-2d42b21b1a3e')" class="pa-4">
+    <v-card 
+      v-for="(album, id) in cachedList"
+      :key="id"
+      class="pa-4 mb-4"
+    >
       <h2 class="mb-2">
-        {{ cachedList['45745c60-7b1a-11e8-9c9c-2d42b21b1a3e'].name }}
+        {{ album.name }}
       </h2>
 
-      <album-img-list :images="cachedList['45745c60-7b1a-11e8-9c9c-2d42b21b1a3e'].imgs" />
+      <album-img-list :images="album.imgs" />
     </v-card>
   </div>
 </template>
@@ -15,8 +19,6 @@ import { mapState, mapMutations } from 'vuex'
 import AlbumImgList from '@/components/AlbumImgList'
 import album from '@/utils/album'
 
-const ALBUM_ID = '45745c60-7b1a-11e8-9c9c-2d42b21b1a3e'
-
 export default {
   name: 'AlbumList',
 
@@ -25,9 +27,7 @@ export default {
   },
 
   data() {
-    return {
-      loaded: []
-    }
+    return {}
   },
 
   computed: {
@@ -35,14 +35,22 @@ export default {
     ...mapState('albums', ['savedList', 'cachedList'])
   },
 
-  async mounted() {
-    const cachedList = await album.loadAlbum(
-      this,
-      this.savedList[ALBUM_ID],
-      this.images
-    )
-    this.setCachedList({ id: ALBUM_ID, data: cachedList })
-    this.loaded.push(ALBUM_ID)
+  watch: {
+    savedList: {
+      async handler(newVal) {
+        for (const albumId of Object.keys(newVal)) {
+          if (!this.cachedList[albumId]) {
+            const cachedList = await album.loadAlbum(
+              this,
+              newVal[albumId],
+              this.images
+            )
+            this.setCachedList({ id: albumId, data: cachedList })
+          }
+        }
+      },
+      immediate: true
+    }
   },
 
   methods: {
