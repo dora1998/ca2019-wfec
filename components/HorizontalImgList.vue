@@ -104,7 +104,6 @@ export default {
     },
     async loadAroundImages(id) {
       try {
-        console.log(id)
         const selectedRes = await this.$api.getImageDetail(id)
         const selectedImg = selectedRes.data.data
 
@@ -114,7 +113,6 @@ export default {
           selectedImg,
           ...listRes.data.next
         ]
-        console.log(this.aroundImgList)
       } catch (err) {
         console.log(err)
       }
