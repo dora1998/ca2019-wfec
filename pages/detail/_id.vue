@@ -25,7 +25,7 @@
           :src="img.url"
           height="100%"
           contain
-          aspect-ratio="2"
+          aspect-ratio="4"
         >
           <template v-slot:placeholder>
             <v-layout
