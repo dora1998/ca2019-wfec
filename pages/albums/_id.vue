@@ -1,7 +1,6 @@
 <template>
   <v-layout
     column
-    justify-center
   >
     <v-flex
       xs12
@@ -15,10 +14,19 @@
         </h1>
       </template>
       <template v-else>
-        <h1 class="mb-2">
-          {{ albumData.name }}
-        </h1>
-        <album-grid :albumImgs="albumData.imgs" />
+        <v-toolbar dark>
+          <v-btn @click="viewAlbumList" icon>
+            <v-icon>arrow_back</v-icon>
+          </v-btn>
+
+          <v-toolbar-title>{{ albumData.name }}</v-toolbar-title>
+
+          <v-spacer />
+        </v-toolbar>
+
+        <div class="pa-2">
+          <album-grid :albumImgs="albumData.imgs" />
+        </div>
       </template>
     </v-flex>
   </v-layout>
@@ -64,7 +72,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('albums', ['setCachedList'])
+    ...mapMutations('albums', ['setCachedList']),
+
+    viewAlbumList() {
+      this.$router.push({ path: '/albums' })
+    }
   }
 }
 </script>

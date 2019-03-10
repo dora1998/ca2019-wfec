@@ -27,5 +27,19 @@ export const actions = {
       imgs: []
     }
     commit('addAlbum', { id: album.generateUUID(), data: data })
+  },
+
+  addImgToAlbum({ state, commit }, params) {
+    const savedAlbum = Object.assign({}, state.savedList[params.albumId])
+    savedAlbum.imgs = savedAlbum.imgs.concat()
+    savedAlbum.imgs.push(params.image.id)
+    commit('addAlbum', { id: params.albumId, data: savedAlbum })
+
+    if (state.cachedList[params.albumId] !== undefined) {
+      const cachedAlbum = Object.assign({}, state.cachedList[params.albumId])
+      cachedAlbum.imgs = cachedAlbum.imgs.concat()
+      cachedAlbum.imgs.push(params.image)
+      commit('setCachedList', { id: params.albumId, data: cachedAlbum })
+    }
   }
 }
