@@ -42,7 +42,8 @@ module.exports = {
     '@/plugins/vuetify',
     '@/plugins/api',
     '@/plugins/polyfill',
-    { src: '@/plugins/lazyload.js', ssr: false }
+    { src: '@/plugins/lazyload.js', ssr: false },
+    { src: '~/plugins/localStorage.js', ssr: false }
   ],
 
   /*
