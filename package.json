@@ -21,6 +21,7 @@
     "intersection-observer": "^0.5.1",
     "moment": "^2.24.0",
     "nuxt": "^2.4.0",
+    "vue-lazyload": "^1.2.6",
     "vuetify": "^1.5.5",
     "vuetify-loader": "^1.2.1"
   },

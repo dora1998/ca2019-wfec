@@ -45,6 +45,9 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
+const IMG_LIMIT_XS = 24
+const IMG_LIMIT = 36
+
 export default {
   name: 'ImageGrid',
 
@@ -76,7 +79,14 @@ export default {
             if (this.isLoadComplete) return
             if (entry.intersectionRatio !== 0) {
               this.loading = true
-              await this.fetchImgList(this.images.length)
+              const limit =
+                this.$vuetify.breakpoint.name === 'xs'
+                  ? IMG_LIMIT_XS
+                  : IMG_LIMIT
+              await this.fetchImgList({
+                offset: this.images.length,
+                limit: limit
+              })
               this.loading = false
             }
           })

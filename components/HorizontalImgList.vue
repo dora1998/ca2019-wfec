@@ -30,32 +30,49 @@ export default {
     }
   },
 
+  data() {
+    return {
+      aroundImgList: []
+    }
+  },
+
   computed: {
     ...mapState(['images']),
     imgIds() {
       return this.images.map(img => img.id)
     },
     filteredImgs() {
-      if (this.selected === null || this.images.length === 0) return []
-      const centerPos = this.imgIds.indexOf(this.selected)
-      if (centerPos === -1) return []
+      if (this.selected === null) return []
 
-      const sliceStart =
-        centerPos - NUM_NEXT_IMAGES >= 0 ? centerPos - NUM_NEXT_IMAGES : 0
-      const sliceEnd = centerPos + NUM_NEXT_IMAGES
-      return this.images.slice(sliceStart, sliceEnd)
+      const centerPos =
+        this.images.length !== 0 ? this.imgIds.indexOf(this.selected) : -1
+
+      if (centerPos > -1) {
+        const sliceStart =
+          centerPos - NUM_NEXT_IMAGES >= 0 ? centerPos - NUM_NEXT_IMAGES : 0
+        const sliceEnd = centerPos + NUM_NEXT_IMAGES
+        return this.images.slice(sliceStart, sliceEnd)
+      } else if (this.aroundImgList.length !== 0) {
+        return this.aroundImgList
+      }
+
+      return []
     }
   },
 
   watch: {
     selected: {
       handler(newVal) {
+        if (newVal === undefined) return
+
         const selectPos = this.imgIds.indexOf(newVal)
-        // TODO: 画像の順番がわかったらその近辺だけを読み込む
-        if (this.images.length === 0) return
+        // 画像の順番がわかったらその近辺だけを読み込む
+        if (this.images.length === 0) {
+          this.loadAroundImages(newVal)
+        }
 
         if (this.images.length <= selectPos + 10) {
-          this.fetchImgList(selectPos + 1)
+          this.fetchImgList({ offset: selectPos + 1, limit: 10 })
         }
       },
       immediate: true
@@ -84,6 +101,21 @@ export default {
       const centerPos = selectedPos.left + selectedPos.width / 2
       const scrollLeftPos = centerPos - containerRect.width / 2
       containerRef.scrollLeft = scrollLeftPos
+    },
+    async loadAroundImages(id) {
+      try {
+        const selectedRes = await this.$api.getImageDetail(id)
+        const selectedImg = selectedRes.data.data
+
+        const listRes = await this.$api.getAroundImageList(id, NUM_NEXT_IMAGES)
+        this.aroundImgList = [
+          ...listRes.data.prev,
+          selectedImg,
+          ...listRes.data.next
+        ]
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
