@@ -1,35 +1,19 @@
 <template>
   <v-bottom-nav
-    :active.sync="selecteed"
+    :active.sync="selected"
     :value="true"
     color="white"
     fixed
   >
     <v-btn
+      v-for="item in menu"
+      :key="item.value"
+      :value="item.value"
       color="teal"
       flat
-      value="recent"
     >
-      <span>Recent</span>
-      <v-icon>history</v-icon>
-    </v-btn>
-
-    <v-btn
-      color="teal"
-      flat
-      value="favorites"
-    >
-      <span>Favorites</span>
-      <v-icon>favorite</v-icon>
-    </v-btn>
-
-    <v-btn
-      color="teal"
-      flat
-      value="nearby"
-    >
-      <span>Nearby</span>
-      <v-icon>place</v-icon>
+      <span v-text="item.name" />
+      <v-icon v-text="item.icon" />
     </v-btn>
   </v-bottom-nav>
 </template>
@@ -47,12 +31,17 @@ export default {
 
   data() {
     return {
-      selecteed: '/',
+      selected: '/',
       menu: [
         {
           name: 'ライブラリ',
           icon: 'image',
           value: '/'
+        },
+        {
+          name: 'アルバム',
+          icon: 'book',
+          value: '/albums'
         }
       ]
     }
@@ -65,6 +54,13 @@ export default {
         this.selecteed = newVal
       },
       immediate: true
+    },
+    selected: {
+      handler(newVal) {
+        // currentPath の watch による変更だった場合は無視
+        if (newVal === this.currentPath) return
+        this.$router.push({ path: newVal })
+      }
     }
   }
 }
