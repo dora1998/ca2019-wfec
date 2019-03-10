@@ -1,7 +1,6 @@
 <template>
   <v-layout
     column
-    justify-center
   >
     <v-flex
       xs12
@@ -14,8 +13,8 @@
       <v-btn
         fab
         dark
-        color="secondary"
         @click="addEmptyAlbum"
+        color="secondary"
         class="fab"
       >
         <v-icon dark>
