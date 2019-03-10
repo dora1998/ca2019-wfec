@@ -14,7 +14,7 @@
     <v-layout
       xs12
       column
-      class="pa-0"
+      class="pa-0 content_container"
     >
       <v-flex
         xs10
@@ -133,6 +133,9 @@ export default {
 }
 .not-shrink {
   flex-shrink: 0;
+}
+.content_container {
+  height: 100%;
 }
 .img_container {
   position: relative;
