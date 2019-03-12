@@ -143,11 +143,6 @@ export default {
       this.show = true
       this.selected = null
     }
-  },
-
-  validate({ params }) {
-    // 数値でなければならない
-    return /^\d+$/.test(params.id)
   }
 }
 </script>
